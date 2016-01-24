@@ -1,18 +1,18 @@
+require 'ruby-progressbar'
+
 class BST
 	attr_accessor :root
-
-	def initialize(root)
-		@root = root
-	end
 
 	def traverse(&blk)
 		_traverse(@root, &blk)
 	end
 
 	def insert(node)
-		raise 'Must initialize BST with root node' if @root.nil?
-
-		_insert(node, @root)
+		if @root.nil?
+			@root = node
+		else
+			_insert(node, @root)
+		end
 	end
 
 	def find(v)
@@ -62,19 +62,30 @@ class Node
 	end
 end
 
-bst = BST.new(Node.new(3))
-bst.insert(Node.new(2))
-bst.insert(Node.new(4))
-bst.insert(Node.new(7))
-bst.insert(Node.new(1))
-bst.insert(Node.new(1))
-bst.insert(Node.new(6))
-bst.insert(Node.new(11))
-bst.insert(Node.new(19))
+def make_random_bst(num_nodes)
+	bst = BST.new
+
+	progress = ProgressBar.create(
+		total: num_nodes
+	)
+	puts 'Building tree...'
+	num_nodes.times { |i|
+		bst.insert(Node.new(rand(i)))
+		progress.increment
+	}
+	bst
+end
+
+# bst = make_random_bst(1000)
+bst = BST.new
+
 bst.insert(Node.new(5))
+bst.insert(Node.new(2))
+bst.insert(Node.new(7))
+bst.insert(Node.new(9))
+
+puts bst.root
 
 bst.traverse { |n| puts n.value }
-
-puts bst.find(4)
 
 
