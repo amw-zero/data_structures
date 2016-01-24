@@ -16,8 +16,7 @@ class BST
 	end
 
 	def find(v)
-		n = traverse { |n| break n if n == v}
-		n
+		traverse { |n| break n if n.value == v}
 	end
 
 	private
