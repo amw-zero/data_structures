@@ -1,79 +1,80 @@
 require 'ruby-progressbar'
 
+# Binary Search Tree implementation
 class BST
-	attr_accessor :root
+  attr_accessor :root
 
-	def traverse(&blk)
-		_traverse(@root, &blk)
-	end
+  def traverse(&blk)
+    _traverse(@root, &blk)
+  end
 
-	def insert(node)
-		if @root.nil?
-			@root = node
-		else
-			_insert(node, @root)
-		end
-	end
+  def insert(node)
+    if @root.nil?
+      @root = node
+    else
+      _insert(node, @root)
+    end
+  end
 
-	def find(v)
-		traverse { |n| break n if n.value == v}
-	end
+  def find(v)
+    traverse { |n| break n if n.value == v }
+  end
 
-	private
+  private
 
-	def _insert(node, parent)
-		if node.value < parent.value
-			if parent.left.nil?
-				parent.left = node
-			else
-				_insert(node, parent.left)
-			end
-		else
-			if parent.right.nil?
-				parent.right = node
-			else
-				_insert(node, parent.right)
-			end
-		end
-	end
+  def _insert(node, parent)
+    if node.value < parent.value
+      if parent.left.nil?
+        parent.left = node
+      else
+        _insert(node, parent.left)
+      end
+    else
+      if parent.right.nil?
+        parent.right = node
+      else
+        _insert(node, parent.right)
+      end
+    end
+  end
 
-	def _traverse(node, &blk)
-		return if node.nil?
+  def _traverse(node, &blk)
+    return if node.nil?
 
-		_traverse(node.left, &blk)
+    _traverse(node.left, &blk)
 
-		yield node
+    yield node
 
-		_traverse(node.right, &blk)
-	end
+    _traverse(node.right, &blk)
+  end
 end
 
 class Node
-	attr_accessor :value, :left, :right
+  attr_accessor :value, :left, :right
 
-	def initialize(v)
-		@value = v
-		@left = nil
-		@right = nil
-	end
+  def initialize(v)
+    @value = v
+    @left = nil
+    @right = nil
+  end
 
-	def to_s
-		"v = #{@value} | l = #{@left || 'nil' } | r = #{@right || 'nil'}"
-	end
+  def to_s
+    "v = #{@value} | l = #{@left || 'nil'} | r = #{@right || 'nil'}"
+  end
 end
 
 def make_random_bst(num_nodes)
-	bst = BST.new
+  bst = BST.new
 
-	progress = ProgressBar.create(
-		total: num_nodes
-	)
-	puts 'Building tree...'
-	num_nodes.times { |i|
-		bst.insert(Node.new(rand(i)))
-		progress.increment
-	}
-	bst
+  progress = ProgressBar.create(
+    total: num_nodes
+  )
+  puts 'Building tree...'
+  num_nodes.times do |i|
+    bst.insert(Node.new(rand(i)))
+    progress.increment
+  end
+  bst
 end
 
 # bst = make_random_bst(1000)
@@ -87,5 +88,3 @@ bst.insert(Node.new(9))
 puts bst.root
 
 bst.traverse { |n| puts n.value }
-
-
